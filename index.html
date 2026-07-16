@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IRON PULSE - Shape Your Body</title>
+    <!-- Google Fonts: Montserrat for bold sporty look, Inter for clean body text -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- 1. CSS VARIABLES & RESET --- */
+        :root {
+            --bg-dark: #121212;
+            --bg-card: #181818;
+            --bg-body: #0B0B0B;
+            --accent-neon: #CCFF00;
+            --accent-neon-hover: #b3df00;
+            --text-main: #FFFFFF;
+            --text-muted: #A0A0A0;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- 2. REUSABLE COMPONENTS --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+            text-align: center;
+            border: none;
+        }
+
+        .btn-neon {
+            background-color: var(--accent-neon);
+            color: #000000 !important;
+        }
+
+        .btn-neon:hover {
+            background-color: var(--accent-neon-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(204, 255, 0, 0.4);
+        }
+
+        .btn-outline {
+            border: 2px solid var(--text-main);
+            color: var(--text-main);
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background-color: var(--text-main);
+            color: #000000 !important;
+            transform: translateY(-2px);
+        }
+
+        section {
+            padding: 80px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-header h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+
+        .section-header h2 span {
+            color: var(--accent-neon);
+        }
+
+        /* --- 3. NAVBAR --- */
+        header {
+            background-color: rgba(18, 18, 18, 0.95);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            border-bottom: 1px solid #1E1E1E;
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .logo {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+            z-index: 1001;
+        }
+
+        .logo span {
+            color: var(--accent-neon);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--accent-neon);
+        }
+
+        /* Mobile Hamburger Toggle */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .hamburger span {
+            width: 100%;
+            height: 3px;
+            background-color: var(--text-main);
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+
+        /* Hamburger Active State */
+        .hamburger.active span:nth-child(1) {
+            transform: translateY(9px) rotate(45deg);
+            background-color: var(--accent-neon);
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active span:nth-child(3) {
+            transform: translateY(-9px) rotate(-45deg);
+            background-color: var(--accent-neon);
+        }
+
+        /* Full Screen Mobile Menu Overlay */
+        .mobile-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: rgba(11, 11, 11, 0.98);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .mobile-menu-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-nav-links {
+            list-style: none;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .mobile-nav-links a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            transition: var(--transition);
+            display: inline-block;
+        }
+
+        .mobile-nav-links a:hover {
+            color: var(--accent-neon);
+            transform: scale(1.1);
+        }
+
+        /* --- 4. HERO SECTION --- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(rgba(11, 11, 11, 0.8), rgba(11, 11, 11, 0.95)), 
+                        url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop') no-repeat center center/cover;
+            padding-top: 100px;
+        }
+
+        .hero-content {
+            max-width: 700px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background-color: rgba(204, 255, 0, 0.1);
+            color: var(--accent-neon);
+            border: 1px solid var(--accent-neon);
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1.1;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            letter-spacing: -1.5px;
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 35px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        /* --- 5. FEATURES SECTION --- */
+        .features {
+            background-color: var(--bg-dark);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background-color: var(--bg-card);
+            border: 1px solid #252525;
+            padding: 40px 30px;
+            border-radius: 10px;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-neon);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            color: var(--accent-neon);
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* --- 6. PRICING SECTION --- */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            align-items: center;
+        }
+
+        .pricing-card {
+            background-color: var(--bg-card);
+            border: 1px solid #252525;
+            border-radius: 12px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .pricing-card.featured {
+            border: 2px solid var(--accent-neon);
+            background: linear-gradient(145deg, #181818, #1e2210);
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--accent-neon);
+            color: #000000;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .plan-name {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 1.5px;
+            font-weight: 700;
+        }
+
+        .price {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3rem;
+            font-weight: 900;
+            margin: 20px 0;
+        }
+
+        .price span {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin: 30px 0;
+            text-align: left;
+            padding-left: 10px;
+        }
+
+        .plan-features li {
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .plan-features li::before {
+            content: "✓";
+            color: var(--accent-neon);
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .plan-features li.disabled {
+            color: #555555;
+            text-decoration: line-through;
+        }
+
+        .plan-features li.disabled::before {
+            content: "✗";
+            color: #FF5F56;
+        }
+
+        /* --- 7. TRAINERS SECTION --- */
+        .trainers {
+            background-color: var(--bg-dark);
+        }
+
+        .trainers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .trainer-card {
+            background-color: var(--bg-card);
+            border-radius: 10px;
+            overflow: hidden;
+            text-align: center;
+            border: 1px solid #252525;
+            transition: var(--transition);
+        }
+
+        .trainer-card:hover {
+            border-color: var(--accent-neon);
+            transform: translateY(-5px);
+        }
+
+        .trainer-img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            filter: grayscale(100%);
+            transition: var(--transition);
+        }
+
+        .trainer-card:hover .trainer-img {
+            filter: grayscale(0%);
+        }
+
+        .trainer-info {
+            padding: 20px;
+        }
+
+        .trainer-info h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .trainer-info p {
+            color: var(--accent-neon);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        /* --- 8. FOOTER --- */
+        footer {
+            background-color: var(--bg-body);
+            border-top: 1px solid #1e1e1e;
+            padding: 60px 0 30px 0;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+        }
+
+        .footer-logo span {
+            color: var(--accent-neon);
+        }
+
+        .footer-desc {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .footer-timing h4, .footer-contact h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .footer-timing p, .footer-contact p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #1e1e1e;
+            padding-top: 30px;
+            text-align: center;
+            color: #555555;
+            font-size: 0.8rem;
+        }
+
+        /* --- 9. MODAL & ANIMATION CSS --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 1100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-box {
+            background-color: var(--bg-card);
+            border: 2px solid var(--accent-neon);
+            width: 90%;
+            max-width: 450px;
+            border-radius: 12px;
+            padding: 35px;
+            position: relative;
+            transform: scale(0.8);
+            transition: var(--transition);
+            box-shadow: 0 10px 30px rgba(204, 255, 0, 0.2);
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.8rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            color: var(--accent-neon);
+        }
+
+        .modal-box h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            color: var(--text-main);
+            text-align: center;
+        }
+
+        .modal-box h3 span {
+            color: var(--accent-neon);
+        }
+
+        .modal-box p {
+            color: var(--text-muted);
+            text-align: center;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: #222;
+            border: 1px solid #333;
+            border-radius: 6px;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--accent-neon);
+            box-shadow: 0 0 8px rgba(204, 255, 0, 0.3);
+        }
+
+        /* Lightning Canvas Overlay */
+        #lightningCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1200;
+            pointer-events: none;
+            display: none;
+        }
+
+        /* Screen Flash & Success Popups */
+        .flash-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            z-index: 1250;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        @keyframes flashEffect {
+            0% { opacity: 0; }
+            10% { opacity: 0.9; }
+            30% { opacity: 0.1; }
+            50% { opacity: 0.8; }
+            100% { opacity: 0; }
+        }
+
+        .success-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(11, 11, 11, 0.95);
+            z-index: 1300;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .success-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .success-card {
+            background-color: var(--bg-card);
+            border: 3px solid var(--accent-neon);
+            padding: 45px 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+            transform: scale(0.7);
+            transition: var(--transition);
+            box-shadow: 0 0 40px rgba(204, 255, 0, 0.3);
+        }
+
+        .success-overlay.active .success-card {
+            transform: scale(1);
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: pulseIcon 1.5s infinite alternate;
+        }
+
+        @keyframes pulseIcon {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.15); filter: drop-shadow(0 0 10px var(--accent-neon)); }
+        }
+
+        .success-card h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--accent-neon);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .success-card p {
+            color: var(--text-main);
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+
+        /* --- 10. MOBILE RESPONSIVENESS --- */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none; 
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+            }
+            .pricing-card.featured:hover {
+                transform: translateY(-5px);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <header>
+        <div class="container navbar">
+            <div class="logo">IRON<span>PULSE</span></div>
+            <ul class="nav-links">
+                <li><a href="#home" class="active">Home</a></li>
+                <li><a href="#features">Programs</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#trainers">Trainers</a></li>
+                <li><button class="btn btn-neon open-modal-btn" style="padding: 8px 20px;">Join Now</button></li>
+            </ul>
+            <!-- Mobile Toggle -->
+            <button class="hamburger" id="hamburgerBtn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- MOBILE OVERLAY MENU -->
+    <div class="mobile-menu-overlay" id="mobileMenu">
+        <ul class="mobile-nav-links">
+            <li><a href="#home" class="mobile-link">Home</a></li>
+            <li><a href="#features" class="mobile-link">Programs</a></li>
+            <li><a href="#pricing" class="mobile-link">Pricing</a></li>
+            <li><a href="#trainers" class="mobile-link">Trainers</a></li>
+            <li><button class="btn btn-neon open-modal-btn mobile-link" style="padding: 12px 30px;">Join Now</button></li>
+        </ul>
+    </div>
+
+    <!-- HERO SECTION -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <span class="hero-badge">⚡ No Pain, No Gain</span>
+                <h1>Shape Your Body, Shape Your Life.</h1>
+                <p>Punjab's ultimate training ground. Equipped with top-tier fitness technologies, certified coaches, and custom meal plans to fuel your grind.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-neon open-modal-btn">Start Free Trial</button>
+                    <a href="#features" class="btn btn-outline">Explore Classes</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- KEY FEATURES / BENEFITS -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Why Choose <span>Iron Pulse</span></h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🏋️‍♂️</div>
+                    <h3>Modern Equipment</h3>
+                    <p>Access high-end cardio units and extensive plate-loaded strength machines for optimal muscle targeting.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💪</div>
+                    <h3>Expert Coaches</h3>
+                    <p>Our certified personal trainers focus on safe form, proper posture, and progressive overload setups.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🥦</div>
+                    <h3>Nutrition Plans</h3>
+                    <p>Tailored diet charts mapped directly to your caloric goals, body structure, and metabolic needs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING SECTION -->
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <div class="section-header">
+                <h2>Select Your <span>Membership</span></h2>
+            </div>
+            <div class="pricing-grid">
+                <!-- Basic Card -->
+                <div class="pricing-card">
+                    <span class="plan-name">Basic Plan</span>
+                    <div class="price">Rs. 3,000<span>/mo</span></div>
+                    <ul class="plan-features">
+                        <li>Access to Gym Area</li>
+                        <li>Standard Locker Access</li>
+                        <li class="disabled">Personal Trainer Guide</li>
+                        <li class="disabled">Custom Diet Chart</li>
+                    </ul>
+                    <button class="btn btn-outline open-modal-btn" data-plan="Basic" style="width: 100%;">Select Plan</button>
+                </div>
+
+                <!-- Pro Card (Featured) -->
+                <div class="pricing-card featured">
+                    <span class="popular-badge">Most Popular</span>
+                    <span class="plan-name" style="color: var(--accent-neon);">Pro Plan</span>
+                    <div class="price">Rs. 5,000<span>/mo</span></div>
+                    <ul class="plan-features">
+                        <li>Access to Gym Area</li>
+                        <li>Standard Locker Access</li>
+                        <li>1-on-1 Trainer Guide</li>
+                        <li>Custom Diet Chart</li>
+                    </ul>
+                    <button class="btn btn-neon open-modal-btn" data-plan="Pro" style="width: 100%;">Get Pro Now</button>
+                </div>
+
+                <!-- VIP Card -->
+                <div class="pricing-card">
+                    <span class="plan-name">VIP Unlimited</span>
+                    <div class="price">Rs. 8,000<span>/mo</span></div>
+                    <ul class="plan-features">
+                        <li>24/7 Gym Access</li>
+                        <li>Private Locker Space</li>
+                        <li>Personal Coach (Always)</li>
+                        <li>Diet & Progress Tracking</li>
+                    </ul>
+                    <button class="btn btn-outline open-modal-btn" data-plan="VIP" style="width: 100%;">Select Plan</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TRAINERS SECTION -->
+    <section id="trainers" class="trainers">
+        <div class="container">
+            <div class="section-header">
+                <h2>Meet Our <span>Elite Instructors</span></h2>
+            </div>
+            <div class="trainers-grid">
+                <!-- Trainer 1 -->
+                <div class="trainer-card">
+                    <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=600&auto=format&fit=crop" alt="Ali Raza" class="trainer-img">
+                    <div class="trainer-info">
+                        <h3>Ali Raza</h3>
+                        <p>Strength & Powerlift Coach</p>
+                    </div>
+                </div>
+                <!-- Trainer 2 -->
+                <div class="trainer-card">
+                    <img src="https://images.unsplash.com/photo-1518310383802-640c2de311b2?q=80&w=600&auto=format&fit=crop" alt="Zainab Khan" class="trainer-img">
+                    <div class="trainer-info">
+                        <h3>Zainab Khan</h3>
+                        <p>HIIT & Cardio Expert</p>
+                    </div>
+                </div>
+                <!-- Trainer 3 -->
+                <div class="trainer-card">
+                    <img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=600&auto=format&fit=crop" alt="Usman Butt" class="trainer-img">
+                    <div class="trainer-info">
+                        <h3>Usman Butt</h3>
+                        <p>Flexibility & Yoga Specialist</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER / CONTACT -->
+    <footer id="contact">
+        <div class="container footer-grid">
+            <div>
+                <div class="footer-logo">IRON<span>PULSE</span></div>
+                <p class="footer-desc">Premium high-energy training center equipped with world-class gear and fitness expertise.</p>
+                <p style="color: var(--accent-neon); font-size: 0.9rem;">📍 Gulberg, Lahore, Pakistan</p>
+            </div>
+            <div class="footer-timing">
+                <h4>Hours of Grind</h4>
+                <p>Monday - Saturday: 6:00 AM - 11:00 PM</p>
+                <p>Sunday: Closed (Rest Day)</p>
+            </div>
+            <div class="footer-contact">
+                <h4>Contact Us</h4>
+                <p>📧 support@ironpulse.com</p>
+                <p>📞 +92 300 1234567</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 IRON PULSE. Designed for elite gains.</p>
+        </div>
+    </footer>
+
+    <!-- --- JOIN NOW MODAL --- -->
+    <div class="modal-overlay" id="joinModalOverlay">
+        <div class="modal-box">
+            <span class="modal-close" id="closeModal">&times;</span>
+            <h3>Join the <span>Clan</span></h3>
+            <p>Fill out the form below to lock in your fitness transformation.</p>
+            <form id="joinForm">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" required placeholder="e.g. Hammad Ali">
+                </div>
+                <div class="form-group">
+                    <label for="phoneNumber">Phone Number</label>
+                    <input type="tel" id="phoneNumber" required placeholder="e.g. +92 300 1234567">
+                </div>
+                <div class="form-group">
+                    <label for="membershipPlan">Choose Plan</label>
+                    <select id="membershipPlan" required>
+                        <option value="Basic">Basic Plan (Rs. 3,000/mo)</option>
+                        <option value="Pro" selected>Pro Plan (Rs. 5,000/mo)</option>
+                        <option value="VIP">VIP Unlimited (Rs. 8,000/mo)</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-neon" style="width: 100%; margin-top: 10px;">Submit Membership</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Lightning Canvas & Success Message Overlays -->
+    <canvas id="lightningCanvas"></canvas>
+    <div class="flash-overlay" id="flashScreen"></div>
+
+    <div class="success-overlay" id="successOverlay">
+        <div class="success-card">
+            <div class="success-icon">⚡🏋️‍♂️⚡</div>
+            <h3 id="successTitle">WELCOME TO THE CLAN!</h3>
+            <p id="successMessage">Your membership request has been successfully captured. Prepare yourself, the grind starts now! Our team will contact you shortly.</p>
+            <button class="btn btn-neon" id="closeSuccessBtn" style="padding: 10px 30px;">Let's Grind</button>
+        </div>
+    </div>
+
+    <!-- --- JAVASCRIPT --- -->
+    <script>
+        // DOM ELEMENTS
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+        
+        const joinModalOverlay = document.getElementById('joinModalOverlay');
+        const closeModalBtn = document.getElementById('closeModal');
+        const openModalButtons = document.querySelectorAll('.open-modal-btn');
+        const membershipPlanSelect = document.getElementById('membershipPlan');
+        const joinForm = document.getElementById('joinForm');
+        
+        const lightningCanvas = document.getElementById('lightningCanvas');
+        const flashScreen = document.getElementById('flashScreen');
+        const successOverlay = document.getElementById('successOverlay');
+        const closeSuccessBtn = document.getElementById('closeSuccessBtn');
+
+        // 1. MOBILE NAVBAR CONTROLLER
+        function toggleMobileMenu() {
+            hamburgerBtn.classList.toggle('active');
+            mobileMenu.classList.toggle('open');
+            // Prevent scrolling behind mobile menu
+            document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : 'auto';
+        }
+
+        hamburgerBtn.addEventListener('click', toggleMobileMenu);
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if(mobileMenu.classList.contains('open')) {
+                    toggleMobileMenu();
+                }
+            });
+        });
+
+        // 2. MODAL CONTROLLERS (OPEN / CLOSE)
+        openModalButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const planValue = button.getAttribute('data-plan');
+                if (planValue) {
+                    membershipPlanSelect.value = planValue;
+                }
+                joinModalOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Lock background scroll
+            });
+        });
+
+        function closeModal() {
+            joinModalOverlay.classList.remove('active');
+            if(!mobileMenu.classList.contains('open')) {
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        closeModalBtn.addEventListener('click', closeModal);
+        joinModalOverlay.addEventListener('click', (e) => {
+            if (e.target === joinModalOverlay) closeModal();
+        });
+
+        // 3. LIGHTNING ANIMATION GENERATOR (Canvas based)
+        const ctx = lightningCanvas.getContext('2d');
+        let animationFrameId;
+
+        function resizeCanvas() {
+            lightningCanvas.width = window.innerWidth;
+            lightningCanvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Lightning {
+            constructor(x1, y1, x2, y2, segments) {
+                this.x1 = x1;
+                this.y1 = y1;
+                this.x2 = x2;
+                this.y2 = y2;
+                this.segments = segments;
+            }
+            draw() {
+                ctx.strokeStyle = '#CCFF00';
+                ctx.shadowColor = '#CCFF00';
+                ctx.shadowBlur = 15;
+                ctx.lineWidth = Math.random() * 3 + 2;
+                ctx.beginPath();
+                ctx.moveTo(this.x1, this.y1);
+
+                let currX = this.x1;
+                let currY = this.y1;
+
+                for (let i = 1; i <= this.segments; i++) {
+                    let targetY = this.y1 + (this.y2 - this.y1) * (i / this.segments);
+                    let targetX = this.x1 + (this.x2 - this.x1) * (i / this.segments) + (Math.random() - 0.5) * 80;
+                    ctx.lineTo(targetX, targetY);
+                    currX = targetX;
+                    currY = targetY;
+                }
+                ctx.lineTo(this.x2, this.y2);
+                ctx.stroke();
+            }
+        }
+
+        function triggerLightningFlash(callback) {
+            lightningCanvas.style.display = 'block';
+            flashScreen.style.animation = 'flashEffect 0.8s ease-out';
+            
+            let counter = 0;
+            function animate() {
+                ctx.clearRect(0, 0, lightningCanvas.width, lightningCanvas.height);
+                
+                // Draw multiple bolts randomly
+                if (Math.random() > 0.1) {
+                    const boltCount = Math.floor(Math.random() * 4) + 2;
+                    for (let i = 0; i < boltCount; i++) {
+                        const startX = Math.random() * lightningCanvas.width;
+                        const endX = startX + (Math.random() - 0.5) * 300;
+                        const bolt = new Lightning(startX, 0, endX, lightningCanvas.height, 12);
+                        bolt.draw();
+                    }
+                }
+
+                counter++;
+                if (counter < 25) { // Run lightning for ~400ms
+                    animationFrameId = requestAnimationFrame(animate);
+                } else {
+                    cancelAnimationFrame(animationFrameId);
+                    ctx.clearRect(0, 0, lightningCanvas.width, lightningCanvas.height);
+                    lightningCanvas.style.display = 'none';
+                    flashScreen.style.animation = 'none';
+                    callback();
+                }
+            }
+            animate();
+        }
+
+        // 4. FORM SUBMIT HANDLER
+        joinForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('fullName').value;
+            const chosenPlan = membershipPlanSelect.value;
+            
+            // Step A: Close current membership form modal
+            closeModal();
+
+            // Step B: Trigger lightning effect, and on complete, show Success Modal
+            setTimeout(() => {
+                triggerLightningFlash(() => {
+                    // Update success details dynamically
+                    document.getElementById('successTitle').innerHTML = `WELCOME TO THE CLAN, ${username.toUpperCase()}! ⚡`;
+                    document.getElementById('successMessage').innerHTML = `Your <strong>${chosenPlan} Plan</strong> enrollment request has sent a shockwave through our server! Grab your shaker, your transformation journey officially begins today. See you at Gulberg, Lahore!`;
+                    
+                    // Display success window
+                    successOverlay.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+            }, 300);
+        });
+
+        // Close success modal
+        closeSuccessBtn.addEventListener('click', () => {
+            successOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            joinForm.reset(); // clear form
+        });
+    </script>
+</body>
+</html>
+
+
